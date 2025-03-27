@@ -1,3 +1,4 @@
+ 
 import React, { useState } from 'react';
 import { 
   View, 
@@ -9,10 +10,13 @@ import {
   ScrollView, 
   TextInput, 
   Switch, 
-  Button 
+  Button,
+  Dimensions
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
+
+const { width } = Dimensions.get('window');
 
 const technologies = [
   {
@@ -124,107 +128,88 @@ const App = () => {
     setTimeout(() => setFormSubmitted(false), 3000);
   };
 
-  return (
+   return (
     <View style={styles.container}>
       <Text style={styles.title}>Catálogo de Tecnologias Emergentes</Text>
       {selectedTech ? (
-        <ScrollView contentContainerStyle={styles.detailsContainer}>
-          <Image source={{ uri: selectedTech.image }} style={styles.largeImage} />
-          <Text style={styles.name}>{selectedTech.name}</Text>
-          <Text style={styles.description}>{selectedTech.details}</Text>
+        <ScrollView 
+          contentContainerStyle={styles.detailsContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.techHeader}>
+            <Image source={{ uri: selectedTech.image }} style={styles.largeImage} />
+            <Text style={styles.name}>{selectedTech.name}</Text>
+            <Text style={styles.description}>{selectedTech.details}</Text>
+          </View>
           
-          {/* Seção de Formulário com os novos componentes */}
+          {/* Seção de Formulário */}
           <View style={styles.formSection}>
             <Text style={styles.sectionTitle}>Formulário de Interesse</Text>
             
-            {/* 4 Inputs de Texto */}
-            <TextInput
-              style={styles.input}
-              placeholder="Digite seu nome"
-              value={textInput1}
-              onChangeText={setTextInput1}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Digite seu email"
-              value={textInput2}
-              onChangeText={setTextInput2}
-              keyboardType="email-address"
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Qual sua profissão?"
-              value={textInput3}
-              onChangeText={setTextInput3}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Comentários adicionais"
-              value={textInput4}
-              onChangeText={setTextInput4}
-              multiline
-            />
+            {/* Inputs */}
+            <TextInput style={styles.input} placeholder="Digite seu nome" />
+            <TextInput style={styles.input} placeholder="Digite seu email" keyboardType="email-address" />
+            <TextInput style={styles.input} placeholder="Qual sua profissão?" />
+            <TextInput style={[styles.input, styles.multilineInput]} placeholder="Comentários" multiline />
             
-            {/* 2 Pickers */}
-            <View style={styles.pickerContainer}>
-              <Text>Nível de interesse:</Text>
-              <Picker
-                selectedValue={selectedPicker1}
-                style={styles.picker}
-                onValueChange={(itemValue) => setSelectedPicker1(itemValue)}>
-                <Picker.Item label="Baixo" value="opcao1" />
-                <Picker.Item label="Médio" value="opcao2" />
-                <Picker.Item label="Alto" value="opcao3" />
-              </Picker>
+            {/* Pickers */}
+            <View style={styles.pickerWrapper}>
+              <Text style={styles.label}>Nível de interesse:</Text>
+              <View style={styles.pickerContainer}>
+                <Picker selectedValue={selectedPicker1} onValueChange={setSelectedPicker1}>
+                  <Picker.Item label="Baixo" value="opcao1" />
+                  <Picker.Item label="Médio" value="opcao2" />
+                  <Picker.Item label="Alto" value="opcao3" />
+                </Picker>
+              </View>
             </View>
-            
-            <View style={styles.pickerContainer}>
-              <Text>Área de atuação:</Text>
-              <Picker
-                selectedValue={selectedPicker2}
-                style={styles.picker}
-                onValueChange={(itemValue) => setSelectedPicker2(itemValue)}>
-                <Picker.Item label="Tecnologia" value="opcao1" />
-                <Picker.Item label="Educação" value="opcao2" />
-                <Picker.Item label="Saúde" value="opcao3" />
-                <Picker.Item label="Negócios" value="opcao4" />
-              </Picker>
+
+            <View style={styles.pickerWrapper}>
+              <Text style={styles.label}>Área de atuação:</Text>
+              <View style={styles.pickerContainer}>
+                <Picker selectedValue={selectedPicker2} onValueChange={setSelectedPicker2}>
+                  <Picker.Item label="Tecnologia" value="opcao1" />
+                  <Picker.Item label="Educação" value="opcao2" />
+                  <Picker.Item label="Saúde" value="opcao3" />
+                  <Picker.Item label="Negócios" value="opcao4" />
+                </Picker>
+              </View>
             </View>
-            
-            {/* 2 Sliders */}
-            <View style={styles.sliderContainer}>
-              <Text>Nível de conhecimento: {sliderValue1}%</Text>
+
+            {/* Sliders */}
+            <View style={styles.sliderWrapper}>
+              <Text style={styles.label}>Nível de conhecimento: {sliderValue1}%</Text>
               <Slider
-                style={styles.slider}
-                minimumValue={0}
-                maximumValue={100}
-                step={5}
                 value={sliderValue1}
                 onValueChange={setSliderValue1}
-                minimumTrackTintColor="#007bff"
-                maximumTrackTintColor="#d3d3d3"
-                thumbTintColor="#007bff"
-              />
-            </View>
-            
-            <View style={styles.sliderContainer}>
-              <Text>Nível de adoção: {sliderValue2}%</Text>
-              <Slider
-                style={styles.slider}
                 minimumValue={0}
                 maximumValue={100}
                 step={5}
-                value={sliderValue2}
-                onValueChange={setSliderValue2}
                 minimumTrackTintColor="#007bff"
                 maximumTrackTintColor="#d3d3d3"
                 thumbTintColor="#007bff"
+                style={styles.slider}
               />
             </View>
-            
-            {/* 2 Switches */}
-            <View style={styles.switchContainer}>
-              <Text>Receber notificações?</Text>
+
+            <View style={styles.sliderWrapper}>
+              <Text style={styles.label}>Nível de adoção: {sliderValue2}%</Text>
+              <Slider
+                value={sliderValue2}
+                onValueChange={setSliderValue2}
+                minimumValue={0}
+                maximumValue={100}
+                step={5}
+                minimumTrackTintColor="#007bff"
+                maximumTrackTintColor="#d3d3d3"
+                thumbTintColor="#007bff"
+                style={styles.slider}
+              />
+            </View>
+
+            {/* Switches */}
+            <View style={styles.switchWrapper}>
+              <Text style={styles.label}>Receber notificações?</Text>
               <Switch
                 value={switch1}
                 onValueChange={setSwitch1}
@@ -232,9 +217,9 @@ const App = () => {
                 thumbColor={switch1 ? "#007bff" : "#f4f3f4"}
               />
             </View>
-            
-            <View style={styles.switchContainer}>
-              <Text>Compartilhar dados para pesquisa?</Text>
+
+            <View style={styles.switchWrapper}>
+              <Text style={styles.label}>Compartilhar dados?</Text>
               <Switch
                 value={switch2}
                 onValueChange={setSwitch2}
@@ -242,49 +227,45 @@ const App = () => {
                 thumbColor={switch2 ? "#007bff" : "#f4f3f4"}
               />
             </View>
-            
-            {/* 2 Botões com interação */}
-            <View style={styles.buttonsContainer}>
-              <Button
-                title={buttonPressed ? "Obrigado!" : "Clique aqui"}
-                onPress={handleButtonPress}
-                color="#007bff"
-              />
+
+            {/* Botões */}
+            <View style={styles.buttonsWrapper}>
+              <View style={styles.buttonContainer}>
+                <Button
+                  title={buttonPressed ? "Obrigado!" : "Clique aqui"}
+                  onPress={handleButtonPress}
+                  color="#007bff"
+                />
+              </View>
               
-              <Button
-                title="Enviar Formulário"
-                onPress={handleSubmit}
-                color="#28a745"
-                disabled={formSubmitted}
-              />
-              {formSubmitted && <Text style={styles.successMessage}>Formulário enviado com sucesso!</Text>}
+              <View style={styles.buttonContainer}>
+                <Button
+                  title="Enviar Formulário"
+                  onPress={handleSubmit}
+                  color="#28a745"
+                />
+              </View>
             </View>
             
-            {/* 5 imagens de formas variadas */}
-            <View style={styles.imagesContainer}>
-              <Image 
-                source={{ uri: 'https://cdn-icons-png.flaticon.com/512/25/25231.png' }} 
-                style={[styles.shapeImage, styles.circleImage]} 
-              />
-              <Image 
-                source={{ uri: 'https://cdn-icons-png.flaticon.com/512/25/25231.png' }} 
-                style={[styles.shapeImage, styles.squareImage]} 
-              />
-              <Image 
-                source={{ uri: 'https://cdn-icons-png.flaticon.com/512/25/25231.png' }} 
-                style={[styles.shapeImage, styles.roundedImage]} 
-              />
-              <Image 
-                source={{ uri: 'https://cdn-icons-png.flaticon.com/512/25/25231.png' }} 
-                style={[styles.shapeImage, styles.triangleImage]} 
-              />
-              <Image 
-                source={{ uri: 'https://cdn-icons-png.flaticon.com/512/25/25231.png' }} 
-                style={[styles.shapeImage, styles.ovalImage]} 
-              />
+            {formSubmitted && (
+              <Text style={styles.successMessage}>Formulário enviado com sucesso!</Text>
+            )}
+
+            {/* Imagens */}
+            <Text style={[styles.label, { marginTop: 20 }]}>Formas Geométricas:</Text>
+            <View style={styles.imagesWrapper}>
+              {['Circulo', 'Quadrado', 'Aredondado', 'triangulo', 'oval'].map((shape, index) => (
+                <View key={index} style={styles.imageContainer}>
+                  <View style={[styles.shape, styles[`${shape}Shape`]]} />
+                  <Text style={styles.shapeLabel}>
+                    {shape.charAt(0).toUpperCase() + shape.slice(1)}
+                  </Text>
+                </View>
+              ))}
             </View>
           </View>
-          
+
+          {/* Exemplos */}
           <Text style={styles.subtitle}>Exemplos de {selectedTech.name}</Text>
           <FlatList
             data={selectedTech.examples}
@@ -292,6 +273,7 @@ const App = () => {
             renderItem={renderExampleItem}
             scrollEnabled={false}
           />
+
           <TouchableOpacity onPress={() => setSelectedTech(null)} style={styles.backButton}>
             <Text style={styles.backButtonText}>Voltar</Text>
           </TouchableOpacity>
@@ -301,16 +283,18 @@ const App = () => {
           data={technologies}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <View style={styles.card}>
+            <TouchableOpacity 
+              style={styles.card} 
+              onPress={() => setSelectedTech(item)}
+              activeOpacity={0.7}
+            >
               <Image source={{ uri: item.image }} style={styles.image} />
               <View style={styles.textContainer}>
                 <Text style={styles.name}>{item.name}</Text>
                 <Text style={styles.description}>{item.description}</Text>
-                <TouchableOpacity onPress={() => setSelectedTech(item)} style={styles.detailsButton}>
-                  <Text style={styles.detailsButtonText}>Ver Detalhes</Text>
-                </TouchableOpacity>
+                <Text style={styles.detailsLink}>Ver Detalhes →</Text>
               </View>
-            </View>
+            </TouchableOpacity>
           )}
         />
       )}
@@ -321,207 +305,227 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#f4f4f4',
+    padding: 16,
+    backgroundColor: '#f8f9fa',
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 20,
+    marginVertical: 16,
+    color: '#343a40',
   },
   card: {
     backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 10,
+    borderRadius: 12,
+    marginBottom: 16,
+    overflow: 'hidden',
+    elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
   },
   image: {
     width: '100%',
-    height: 150,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  largeImage: {
-    width: '100%',
-    height: 250,
-    borderRadius: 10,
-    marginBottom: 10,
+    height: 180,
   },
   textContainer: {
-    alignItems: 'center',
+    padding: 16,
   },
   name: {
     fontSize: 18,
     fontWeight: 'bold',
+    marginBottom: 8,
+    color: '#212529',
   },
   description: {
     fontSize: 14,
-    color: '#555',
-    textAlign: 'center',
-    marginBottom: 10,
+    color: '#495057',
+    marginBottom: 12,
+    lineHeight: 20,
   },
-  detailsButton: {
-    backgroundColor: '#007bff',
-    padding: 10,
-    borderRadius: 5,
-  },
-  detailsButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+  detailsLink: {
+    color: '#007bff',
+    fontWeight: '500',
+    textAlign: 'right',
   },
   detailsContainer: {
-    flexGrow: 1,
-    alignItems: 'center',
-    paddingBottom: 20,
+    paddingBottom: 24,
   },
-  backButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: '#007bff',
-    borderRadius: 5,
+  techHeader: {
+    marginBottom: 24,
   },
-  backButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  subtitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 10,
-  },
-  exampleCard: {
-    flexDirection: 'row', // Layout lado a lado
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  exampleImage: {
-    width: 80, // Tamanho fixo para a imagem
-    height: 80,
-    borderRadius: 50, // Aredonda as Bordas, deixando redondinho
-    marginRight: 10, // Espaço entre a imagem e o texto
-  },
-  exampleTextContainer: {
-    flex: 1, // Ocupa o espaço restante
-    justifyContent: 'center',
-  },
-  exampleName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  exampleDescription: {
-    fontSize: 14,
-    color: '#555',
+  largeImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: 12,
+    marginBottom: 16,
   },
   formSection: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
+    elevation: 2,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 15,
+    marginBottom: 16,
+    color: '#212529',
     textAlign: 'center',
-    color: '#333',
   },
   input: {
-    height: 40,
-    borderColor: '#ddd',
+    backgroundColor: '#f1f3f5',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+    fontSize: 14,
     borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 15,
+    borderColor: '#dee2e6',
+  },
+  multilineInput: {
+    height: 100,
+    textAlignVertical: 'top',
+  },
+  pickerWrapper: {
+    marginBottom: 16,
+  },
+  label: {
+    fontSize: 14,
+    color: '#495057',
+    marginBottom: 8,
+    fontWeight: '500',
   },
   pickerContainer: {
     borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
-    marginBottom: 15,
-    paddingHorizontal: 5,
+    borderColor: '#dee2e6',
+    borderRadius: 8,
+    overflow: 'hidden',
   },
-  picker: {
-    height: 50,
-    width: '100%',
-  },
-  sliderContainer: {
+  sliderWrapper: {
     marginBottom: 20,
   },
   slider: {
     width: '100%',
     height: 40,
   },
-  switchContainer: {
+  switchWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15,
-    paddingHorizontal: 5,
+    marginBottom: 16,
+    paddingVertical: 8,
   },
-  buttonsContainer: {
-    marginVertical: 15,
-    gap: 10,
+  buttonsWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 8,
+    marginBottom: 16,
+  },
+  buttonContainer: {
+    flex: 1,
+    marginHorizontal: 4,
   },
   successMessage: {
     color: '#28a745',
     textAlign: 'center',
-    marginTop: 10,
+    marginTop: 8,
+    fontWeight: '500',
   },
-  imagesContainer: {
+  imagesWrapper: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     flexWrap: 'wrap',
-    marginTop: 15,
+    justifyContent: 'space-between',
+    marginTop: 8,
   },
-  shapeImage: {
+  imageContainer: {
+    alignItems: 'center',
+    width: (width - 48) / 3,
+    marginBottom: 16,
+  },
+  shape: {
     width: 60,
     height: 60,
-    marginBottom: 10,
+    backgroundColor: '#007bff',
+    marginBottom: 8,
   },
-  circleImage: {
+  circleShape: {
     borderRadius: 30,
   },
-  squareImage: {
+  squareShape: {
     borderRadius: 0,
   },
-  roundedImage: {
-    borderRadius: 10,
+  roundedShape: {
+    borderRadius: 12,
   },
-  triangleImage: {
+  triangleShape: {
     width: 0,
     height: 0,
     backgroundColor: 'transparent',
     borderStyle: 'solid',
     borderLeftWidth: 30,
     borderRightWidth: 30,
-    borderBottomWidth: 60,
+    borderBottomWidth: 52,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
     borderBottomColor: '#007bff',
   },
-  ovalImage: {
-    borderRadius: 30,
+  ovalShape: {
     width: 80,
     height: 40,
+    borderRadius: 40,
+  },
+  shapeLabel: {
+    fontSize: 12,
+    color: '#495057',
+  },
+  exampleCard: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 12,
+    elevation: 1,
+  },
+  exampleImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 12,
+  },
+  exampleTextContainer: {
+    flex: 1,
+  },
+  exampleName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 4,
+    color: '#212529',
+  },
+  exampleDescription: {
+    fontSize: 12,
+    color: '#6c757d',
+    lineHeight: 16,
+  },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginVertical: 16,
+    color: '#212529',
+  },
+  backButton: {
+    backgroundColor: '#007bff',
+    padding: 14,
+    borderRadius: 8,
+    marginTop: 16,
+    alignItems: 'center',
+  },
+  backButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 
